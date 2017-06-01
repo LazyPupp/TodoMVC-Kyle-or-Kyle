@@ -196,6 +196,9 @@ describe('TodoMVC API:', () => {
         return chai.request(app)
           .post('/api/items')
           .send(newItem)
+          .then(function (result) {
+            result.should.not.have.status(201);
+          })
           .catch((err) => {
             err.should.have.status(400);
           });
@@ -241,6 +244,7 @@ describe('TodoMVC API:', () => {
             return chai.request(root).get(path);
           })
           .then(function (result) {
+            console.log("Result from GET: ", result.body);
             result.body.should.have.property('title', newItem.title);
           })
           .catch((err) => {

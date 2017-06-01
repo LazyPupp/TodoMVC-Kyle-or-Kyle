@@ -31,7 +31,6 @@ app.get('/api/items/:id',(req,res)=>{
 });
 
 app.get('/api/items', (req, res) => {
-
   knex
     .select(req.body.id, req.body.title)
     .from('items')
@@ -41,16 +40,20 @@ app.get('/api/items', (req, res) => {
 });
 
 app.post('/api/items', (req, res) => {
-  //const requiredFields = ['title'];
-
   if(!req.body.title){
     const message = `Missing title in body request.`;
     console.error(message);
     return res.status(400).send(message);
   }
-  res.status(201);
-  res.location('/api/items');
-  res.json({'title': req.body.title});
+  knex
+    .insert({title: req.body.title})
+    .into('items')
+    .returning(['id', 'title', 'completed'])
+    .then( result => {
+      res.status(201);
+      // res.location(`${req.protocol}://${req.hostname}/api/items/${result[0].id}`);
+      res.json(Object.assign({}, result[0], {url: `${req.protocol}://${req.hostname}:${PORT}/api/items/${result[0].id}`}));
+    });
 });
 
 
