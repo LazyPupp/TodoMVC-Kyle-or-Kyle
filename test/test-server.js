@@ -186,7 +186,7 @@ describe('TodoMVC API:', () => {
       });
     });
 
-    describe('POST endpoint', function () {
+    describe.skip('POST endpoint', function () {
       /**
        * This test requires you to check the incoming post body to make sure it contains
        * valid data before saving to the database
@@ -334,11 +334,11 @@ describe('TodoMVC API:', () => {
 
     });
 
-    describe.skip('PUT endpoint', function () {
+    describe('PUT endpoint', function () {
       /**
        * This test requires you to wireup the database to the PUT endpoint so the title can be changed
        */
-      it('should change a todo title by PUTing', function () {
+      it.only('should change a todo title by PUTing', function () {
         const newItem = { title: 'Buy soy milk' };
         const putItem = { title: 'Buy real milk' };
         let itemId;

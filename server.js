@@ -32,10 +32,19 @@ app.get('/api/items/:id',(req,res)=>{
 
 app.get('/api/items', (req, res) => {
   knex
-    .select(req.body.id, req.body.title)
+    .select(req.body.id, req.body.title,req.body.completed)
     .from('items')
     .then(result =>{
-      res.json(result);
+      console.log(result);
+      const urlWithResult = result.map(el=>{
+        return {
+          id: el.id,
+          title: el.title,
+          completed: el.completed,
+          url: `${req.protocol}://${req.get('host')}/api/items/${el.id}`
+        };
+      });
+      res.json(urlWithResult);
     });
 });
 
@@ -51,12 +60,27 @@ app.post('/api/items', (req, res) => {
     .returning(['id', 'title', 'completed'])
     .then( result => {
       res.status(201);
-      // res.location(`${req.protocol}://${req.hostname}/api/items/${result[0].id}`);
+      res.location(`${req.protocol}://${req.get('host')}/api/items/${result[0].id}`);
       res.json(Object.assign({}, result[0], {url: `${req.protocol}://${req.get('host')}/api/items/${result[0].id}`}));
     });
 });
 
-
+app.put('/api/items/:id',(req,res)=>{
+  if(!req.body.title){
+    const message = `Missing title in body request.`;
+    console.error(message);
+    return res.status(400).send(message);
+  }
+  console.log(req.body.title);
+  knex('items')
+  .update('title',req.body.title)
+  .where('id',req.params.id)
+  .returning(['title','id','completed'])
+  .then(result=>{
+    console.log(result);
+    res.json(result[0]);
+  }); 
+});
 function runServer(database = DATABASE, port = PORT) {
   return new Promise((resolve, reject) => {
     try {
