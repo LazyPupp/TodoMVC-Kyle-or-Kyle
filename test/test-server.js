@@ -186,7 +186,7 @@ describe('TodoMVC API:', () => {
       });
     });
 
-    describe('POST endpoint', function () {
+    describe.skip('POST endpoint', function () {
       /**
        * This test requires you to check the incoming post body to make sure it contains
        * valid data before saving to the database
@@ -231,7 +231,7 @@ describe('TodoMVC API:', () => {
       /**
        * This test requires you to add a URL to the response which has the location of the new item. 
        */
-      it.only('should respond with a URL which can be used to retrieve the new item', function () {
+      it('should respond with a URL which can be used to retrieve the new item', function () {
         const newItem = { title: 'Buy milk' };
         return chai.request(app)
           .post('/api/items')
@@ -334,11 +334,11 @@ describe('TodoMVC API:', () => {
 
     });
 
-    describe.skip('PUT endpoint', function () {
+    describe('PUT endpoint', function () {
       /**
        * This test requires you to wireup the database to the PUT endpoint so the title can be changed
        */
-      it('should change a todo title by PUTing', function () {
+      it.only('should change a todo title by PUTing', function () {
         const newItem = { title: 'Buy soy milk' };
         const putItem = { title: 'Buy real milk' };
         let itemId;
