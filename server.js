@@ -95,9 +95,11 @@ app.post('/api/items', (req, res) => {
 
 //checks if the user passed a completed key in the object they to the server
 //if the user did, it updates the title and completed key
-//if the user didn't, it updates the title
+//if the user passed only completed, it updates completed
+//if the user passed only title, it updates the title
+//if none of these are inputted return an error
 app.put('/api/items/:id', (req,res) => {
-  if (req.body.completed) {
+  if (req.body.completed && req.body.title) {
     knex('items')
     .update( {'title': req.body.title, 'completed': req.body.completed} )
     .where('id', req.params.id)
@@ -105,7 +107,7 @@ app.put('/api/items/:id', (req,res) => {
     .then(result => {
       return res.json(result[0]);
     });
-  } else {
+  } else if(req.body.title){
     knex('items')
     .update('title', req.body.title)
     .where('id', req.params.id)
@@ -113,6 +115,16 @@ app.put('/api/items/:id', (req,res) => {
     .then(result => {
       return res.json(result[0]);
     });
+  } else if(req.body.completed){
+    knex('items')
+    .update('completed', req.body.completed)
+    .where('id', req.params.id)
+    .returning(['title', 'id', 'completed'])
+    .then(result => {
+      return res.json(result[0]);
+    });
+  }else{
+    return res.status(400).send(`Missing title or completed in body request.`);
   }
 });
 
