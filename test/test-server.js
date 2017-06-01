@@ -231,7 +231,7 @@ describe('TodoMVC API:', () => {
       /**
        * This test requires you to add a URL to the response which has the location of the new item. 
        */
-      it.only('should respond with a URL which can be used to retrieve the new item', function () {
+      it('should respond with a URL which can be used to retrieve the new item', function () {
         const newItem = { title: 'Buy milk' };
         return chai.request(app)
           .post('/api/items')
@@ -284,7 +284,7 @@ describe('TodoMVC API:', () => {
        * - http://stackoverflow.com/a/10185427
        * - https://expressjs.com/en/api.html#req.protocol
        */
-      it('should respond with a valid location header', function () {
+      it.('should respond with a valid location header', function () {
         const newItem = { title: 'Buy milk' };
         return chai.request(app)
           .post('/api/items')
