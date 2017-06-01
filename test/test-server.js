@@ -26,7 +26,7 @@ describe('TodoMVC API:', () => {
    * Hint: Use `.only` or `.skip` to focus on a specific `describe` or `it` block
    *  - https://mochajs.org/#exclusive-tests
    */
-  describe('GET and POST endpoint skeleton:', function () {
+  describe.skip('GET and POST endpoint skeleton:', function () {
     /**
      * This test requires a skeleton GET endpoint which responds with an array
      * and a status of 200 "OK"
@@ -96,7 +96,7 @@ describe('TodoMVC API:', () => {
      * HINT: "Use the body-parser, Luke!"
      * https://expressjs.com/en/4x/api.html#req.body
      */
-    it.only('should respond to POST with the title of item that was POSTed', function () {
+    it('should respond to POST with the title of item that was POSTed', function () {
       const newItem = { title: 'Walk the dog' };
       return chai.request(app)
         .post('/api/items')
@@ -138,7 +138,7 @@ describe('TodoMVC API:', () => {
         });
     });
 
-    describe('GET endpoints', function () {
+    describe.skip('GET endpoints', function () {
       /**
        * This requires you to wire-up the GET /api/items endpoint to knex and postgres
        */
@@ -329,7 +329,7 @@ describe('TodoMVC API:', () => {
 
     });
 
-    describe('PUT endpoint', function () {
+    describe.skip('PUT endpoint', function () {
       /**
        * This test requires you to wireup the database to the PUT endpoint so the title can be changed
        */
@@ -389,7 +389,7 @@ describe('TodoMVC API:', () => {
       });
     });
 
-    describe('DELETE endpoint', function () {
+    describe.skip('DELETE endpoint', function () {
       /**
        * This test requires you to wire-up the delete endpoint so items can be deleted.
        */

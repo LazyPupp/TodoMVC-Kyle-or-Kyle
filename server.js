@@ -16,18 +16,38 @@ app.use(setCORSheaders);
 app.use(bodyParser.json());
 
 function setCORSheaders(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
   next();
 }
-
+app.get('/api/items/:id',(req,res)=>{
+  knex('items')
+    .select(req.body.id, req.body.title)
+    .where({ 'id': req.params.id})
+    .then(result=>{
+      res.json(result[0]);
+    });
+});
 
 app.get('/api/items', (req, res) => {
-  res.json([]);
+
+  knex
+    .select(req.body.id, req.body.title)
+    .from('items')
+    .then(result =>{
+      res.json(result);
+    });
 });
 
 app.post('/api/items', (req, res) => {
+  //const requiredFields = ['title'];
+
+  if(!req.body.title){
+    const message = `Missing title in body request.`;
+    console.error(message);
+    return res.status(400).send(message);
+  }
   res.status(201);
   res.location('/api/items');
   res.json({'title': req.body.title});
