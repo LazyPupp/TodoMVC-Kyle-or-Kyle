@@ -52,7 +52,7 @@ app.post('/api/items', (req, res) => {
     .then( result => {
       res.status(201);
       // res.location(`${req.protocol}://${req.hostname}/api/items/${result[0].id}`);
-      res.json(Object.assign({}, result[0], {url: `${req.protocol}://${req.hostname}:${PORT}/api/items/${result[0].id}`}));
+      res.json(Object.assign({}, result[0], {url: `${req.protocol}://${req.get('host')}/api/items/${result[0].id}`}));
     });
 });
 
