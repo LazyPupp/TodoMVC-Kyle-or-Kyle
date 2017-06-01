@@ -12,6 +12,7 @@ const app = express();
 let server;
 let knex;
 
+//allows us to use the middleware functions on all the app functions
 app.use(setCorsHeaders);
 app.use(bodyParser.json());
 
