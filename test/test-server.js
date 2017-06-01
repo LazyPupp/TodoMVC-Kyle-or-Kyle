@@ -142,7 +142,7 @@ describe('TodoMVC API:', () => {
       /**
        * This requires you to wire-up the GET /api/items endpoint to knex and postgres
        */
-      it.only('should respond with the items in the database', function () {
+      it('should respond with the items in the database', function () {
         const newItem = { title: 'Buy soy milk' };
         let itemId;
         return knex('items')
@@ -155,7 +155,7 @@ describe('TodoMVC API:', () => {
           .then(function (result) {
             result.should.have.status(200);
             result.body.should.be.a('array');
-            result.body[0].should.have.property('id', (itemId)); // - 2
+            result.body[result.body.length - 1].should.have.property('id', itemId);
           })
           .catch((err) => {
             throw (err);

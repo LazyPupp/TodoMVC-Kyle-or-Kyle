@@ -12,30 +12,31 @@ const app = express();
 let server;
 let knex;
 
-app.use(setCORSheaders);
+app.use(setCorsHeaders);
 app.use(bodyParser.json());
 
-function setCORSheaders(req, res, next) {
+function setCorsHeaders(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
   next();
 }
-app.get('/api/items/:id',(req,res)=>{
+
+app.get('/api/items/:id', (req, res) => {
   knex('items')
     .select(req.body.id, req.body.title)
-    .where({ 'id': req.params.id})
-    .then(result=>{
+    .where({ 'id': req.params.id })
+    .then(result => {
       res.json(result[0]);
     });
 });
 
 app.get('/api/items', (req, res) => {
   knex
-    .select(req.body.id, req.body.title,req.body.completed)
+    .select(req.body.id, req.body.title, req.body.completed)
     .from('items')
-    .then(result =>{
-      const urlWithResult = result.map(el=>{
+    .then(result => {
+      const resultsWithUrl = result.map(el => {
         return {
           id: el.id,
           title: el.title,
@@ -43,42 +44,41 @@ app.get('/api/items', (req, res) => {
           url: `${req.protocol}://${req.get('host')}/api/items/${el.id}`
         };
       });
-      res.json(urlWithResult);
+      res.json(resultsWithUrl);
     });
 });
 
 app.post('/api/items', (req, res) => {
-  if(!req.body.title){
-    const message = `Missing title in body request.`;
-    console.error(message);
-    return res.status(400).send(message);
+  if (!req.body.title) {
+    return res.status(400).send(`Missing title in body request.`);
   }
   knex
     .insert({title: req.body.title})
     .into('items')
     .returning(['id', 'title', 'completed'])
-    .then( result => {
+    .then(result => {
+      const URL = `${req.protocol}://${req.get('host')}/api/items/${result[0].id}`;
       res.status(201);
-      res.location(`${req.protocol}://${req.get('host')}/api/items/${result[0].id}`);
-      res.json(Object.assign({}, result[0], {url: `${req.protocol}://${req.get('host')}/api/items/${result[0].id}`})); 
+      res.location(URL);
+      res.json(Object.assign({}, result[0], { url: URL } )); 
     });
 });
 
-app.put('/api/items/:id',(req,res)=>{
+app.put('/api/items/:id', (req,res) => {
   if (req.body.completed) {
     knex('items')
-    .update({'title': req.body.title, 'completed': req.body.completed})
-    .where('id',req.params.id)
-    .returning(['title','id','completed'])
-    .then(result=>{
+    .update( {'title': req.body.title, 'completed': req.body.completed} )
+    .where('id', req.params.id)
+    .returning(['title', 'id', 'completed'])
+    .then(result => {
       return res.json(result[0]);
     });
   } else {
     knex('items')
-    .update('title',req.body.title)
-    .where('id',req.params.id)
-    .returning(['title','id','completed'])
-    .then(result=>{
+    .update('title', req.body.title)
+    .where('id', req.params.id)
+    .returning(['title', 'id', 'completed'])
+    .then(result => {
       return res.json(result[0]);
     });
   }
@@ -88,10 +88,11 @@ app.delete('/api/items/:id', (req, res) => {
   knex('items')
     .where('id', req.params.id)
     .del()
-    .then( result => {
+    .then(result => {
       res.json(result);
     });
 });
+
 function runServer(database = DATABASE, port = PORT) {
   return new Promise((resolve, reject) => {
     try {
