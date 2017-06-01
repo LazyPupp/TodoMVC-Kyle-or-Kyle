@@ -35,7 +35,6 @@ app.get('/api/items', (req, res) => {
     .select(req.body.id, req.body.title,req.body.completed)
     .from('items')
     .then(result =>{
-      console.log(result);
       const urlWithResult = result.map(el=>{
         return {
           id: el.id,
@@ -61,25 +60,37 @@ app.post('/api/items', (req, res) => {
     .then( result => {
       res.status(201);
       res.location(`${req.protocol}://${req.get('host')}/api/items/${result[0].id}`);
-      res.json(Object.assign({}, result[0], {url: `${req.protocol}://${req.get('host')}/api/items/${result[0].id}`}));
+      res.json(Object.assign({}, result[0], {url: `${req.protocol}://${req.get('host')}/api/items/${result[0].id}`})); 
     });
 });
 
 app.put('/api/items/:id',(req,res)=>{
-  if(!req.body.title){
-    const message = `Missing title in body request.`;
-    console.error(message);
-    return res.status(400).send(message);
+  if (req.body.completed) {
+    knex('items')
+    .update({'title': req.body.title, 'completed': req.body.completed})
+    .where('id',req.params.id)
+    .returning(['title','id','completed'])
+    .then(result=>{
+      return res.json(result[0]);
+    });
+  } else {
+    knex('items')
+    .update('title',req.body.title)
+    .where('id',req.params.id)
+    .returning(['title','id','completed'])
+    .then(result=>{
+      return res.json(result[0]);
+    });
   }
-  console.log(req.body.title);
+});
+
+app.delete('/api/items/:id', (req, res) => {
   knex('items')
-  .update('title',req.body.title)
-  .where('id',req.params.id)
-  .returning(['title','id','completed'])
-  .then(result=>{
-    console.log(result);
-    res.json(result[0]);
-  }); 
+    .where('id', req.params.id)
+    .del()
+    .then( result => {
+      res.json(result);
+    });
 });
 function runServer(database = DATABASE, port = PORT) {
   return new Promise((resolve, reject) => {

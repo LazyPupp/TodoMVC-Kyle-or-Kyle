@@ -23,10 +23,10 @@ describe('TodoMVC API:', () => {
    *  ==================
    * - Create skeleton endpoints for GET and POST
    * 
-   * Hint: Use `.only` or `.skip` to focus on a specific `describe` or `it` block
+   * Hint: Use `.only` or `` to focus on a specific `describe` or `it` block
    *  - https://mochajs.org/#exclusive-tests
    */
-  describe.skip('GET and POST endpoint skeleton:', function () {
+  describe('GET and POST endpoint skeleton:', function () {
     /**
      * This test requires a skeleton GET endpoint which responds with an array
      * and a status of 200 "OK"
@@ -78,7 +78,7 @@ describe('TodoMVC API:', () => {
     it('should respond to POST with an object a status 201 and a location header', function () {
       return chai.request(app)
         .post('/api/items')
-        .send({})
+        .send({title: "contradicting test yo!"})
         .then(function (result) {
           result.should.have.status(201);
           result.should.have.header('location');
@@ -138,11 +138,11 @@ describe('TodoMVC API:', () => {
         });
     });
 
-    describe.skip('GET endpoints', function () {
+    describe('GET endpoints', function () {
       /**
        * This requires you to wire-up the GET /api/items endpoint to knex and postgres
        */
-      it('should respond with the items in the database', function () {
+      it.only('should respond with the items in the database', function () {
         const newItem = { title: 'Buy soy milk' };
         let itemId;
         return knex('items')
@@ -155,7 +155,7 @@ describe('TodoMVC API:', () => {
           .then(function (result) {
             result.should.have.status(200);
             result.body.should.be.a('array');
-            result.body[0].should.have.property('id', itemId);
+            result.body[0].should.have.property('id', (itemId)); // - 2
           })
           .catch((err) => {
             throw (err);
@@ -186,7 +186,7 @@ describe('TodoMVC API:', () => {
       });
     });
 
-    describe.skip('POST endpoint', function () {
+    describe('POST endpoint', function () {
       /**
        * This test requires you to check the incoming post body to make sure it contains
        * valid data before saving to the database
@@ -237,7 +237,6 @@ describe('TodoMVC API:', () => {
           .post('/api/items')
           .send(newItem)
           .then(function (result) {
-            console.log("URL: ", result.body.url);
             const url = result.body.url;
             const split = url.lastIndexOf('/');
             const root = url.slice(0, split);
@@ -245,7 +244,6 @@ describe('TodoMVC API:', () => {
             return chai.request(root).get(path);
           })
           .then(function (result) {
-            console.log("Result from GET: ", result.body);
             result.body.should.have.property('title', newItem.title);
           })
           .catch((err) => {
@@ -284,7 +282,7 @@ describe('TodoMVC API:', () => {
        * - http://stackoverflow.com/a/10185427
        * - https://expressjs.com/en/api.html#req.protocol
        */
-      it.('should respond with a valid location header', function () {
+      it('should respond with a valid location header', function () {
         const newItem = { title: 'Buy milk' };
         return chai.request(app)
           .post('/api/items')
@@ -338,7 +336,7 @@ describe('TodoMVC API:', () => {
       /**
        * This test requires you to wireup the database to the PUT endpoint so the title can be changed
        */
-      it.only('should change a todo title by PUTing', function () {
+      it('should change a todo title by PUTing', function () {
         const newItem = { title: 'Buy soy milk' };
         const putItem = { title: 'Buy real milk' };
         let itemId;
@@ -394,7 +392,7 @@ describe('TodoMVC API:', () => {
       });
     });
 
-    describe.skip('DELETE endpoint', function () {
+    describe('DELETE endpoint', function () {
       /**
        * This test requires you to wire-up the delete endpoint so items can be deleted.
        */
@@ -422,10 +420,6 @@ describe('TodoMVC API:', () => {
           });
       });
     });
-
-
   });
-
-
 });
 
