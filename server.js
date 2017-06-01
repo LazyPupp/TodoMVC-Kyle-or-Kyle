@@ -15,13 +15,27 @@ let knex;
 app.use(setCorsHeaders);
 app.use(bodyParser.json());
 
+/** 
+ @function setCorsHeaders
+ @desc  a middleware used to to set the response headers of Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+        and Access-Control-Allow-Origin
+ @param {req} the request you are getting from the client
+ @param {res} the response you are sending to the client
+ @param {next} the function that you are telling the middleware stack to 
+                pass control to the next middleware function in the stack
+ @returns undefined
+*/
 function setCorsHeaders(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
   next();
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////           Get /API/Items             //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
+//returns the item with an id of whatever you put after the endpoint (/api/items/) 
 app.get('/api/items/:id', (req, res) => {
   knex('items')
     .select(req.body.id, req.body.title)
@@ -31,6 +45,7 @@ app.get('/api/items/:id', (req, res) => {
     });
 });
 
+//returns a list of items in the database
 app.get('/api/items', (req, res) => {
   knex
     .select(req.body.id, req.body.title, req.body.completed)
@@ -48,6 +63,15 @@ app.get('/api/items', (req, res) => {
     });
 });
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////           Post /API/Items             /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+//checks if the user pass in a title key in the object they to the server
+//if the user didn't, the server will send an error to the client
+//if the user did, the server will insert what gets sent in by the client, 
+//set the location header to a URL, 
+//and sends a json with the results and the url back to the client
 app.post('/api/items', (req, res) => {
   if (!req.body.title) {
     return res.status(400).send(`Missing title in body request.`);
@@ -64,6 +88,13 @@ app.post('/api/items', (req, res) => {
     });
 });
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////           Put /API/Items             //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+//checks if the user passed a completed key in the object they to the server
+//if the user did, it updates the title and completed key
+//if the user didn't, it updates the title
 app.put('/api/items/:id', (req,res) => {
   if (req.body.completed) {
     knex('items')
@@ -84,6 +115,12 @@ app.put('/api/items/:id', (req,res) => {
   }
 });
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////           Delete /API/Items             ///////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+//deletes the item with an id of whatever you put after the endpoint (/api/items/) 
 app.delete('/api/items/:id', (req, res) => {
   knex('items')
     .where('id', req.params.id)
@@ -93,6 +130,9 @@ app.delete('/api/items/:id', (req, res) => {
     });
 });
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////           Running and Closing Server            ////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 function runServer(database = DATABASE, port = PORT) {
   return new Promise((resolve, reject) => {
     try {
