@@ -96,7 +96,7 @@ describe('TodoMVC API:', () => {
      * HINT: "Use the body-parser, Luke!"
      * https://expressjs.com/en/4x/api.html#req.body
      */
-    it('should respond to POST with the title of item that was POSTed', function () {
+    it.only('should respond to POST with the title of item that was POSTed', function () {
       const newItem = { title: 'Walk the dog' };
       return chai.request(app)
         .post('/api/items')

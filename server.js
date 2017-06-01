@@ -3,12 +3,37 @@
 const express = require('express');
 const { DATABASE, PORT } = require('./config');
 
+const bodyParser = require('body-parser');
+
 const app = express();
 
 // Add middleware and .get, .post, .put and .delete endpoints
 
 let server;
 let knex;
+
+app.use(setCORSheaders);
+app.use(bodyParser.json());
+
+function setCORSheaders(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+  next();
+}
+
+
+app.get('/api/items', (req, res) => {
+  res.json([]);
+});
+
+app.post('/api/items', (req, res) => {
+  res.status(201);
+  res.location('/api/items');
+  res.json({'title': req.body.title});
+});
+
+
 function runServer(database = DATABASE, port = PORT) {
   return new Promise((resolve, reject) => {
     try {
