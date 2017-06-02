@@ -10,4 +10,4 @@ exports.DATABASE = {
   // debug: true
 };
 
-exports.PORT = process.env.PORT || 8080; 
+exports.PORT = 8080; 

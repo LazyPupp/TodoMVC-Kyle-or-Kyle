@@ -40,7 +40,6 @@ describe('TodoMVC API:', () => {
           result.should.have.status(200);
           result.should.be.json;
           result.body.should.be.a('array');
-          result.body.should.be.empty;
         })
         .catch((err) => {
           throw (err);
