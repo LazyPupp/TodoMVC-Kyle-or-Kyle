@@ -36,6 +36,9 @@ function setCorsHeaders(req, res, next) {
 ///////////////////////////           Get /API/Items             //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+app.get('/', (req, res) => {
+  res.send("Hello world");
+});
 //returns the item with an id of whatever you put after the endpoint (/api/items/) 
 app.get('/api/items/:id', (req, res) => {
   knex('items')
@@ -44,7 +47,7 @@ app.get('/api/items/:id', (req, res) => {
     .then(result => {
       res.json(result[0]);
     });
-});
+}); 
 
 //returns a list of items in the database
 app.get('/api/items', (req, res) => {
