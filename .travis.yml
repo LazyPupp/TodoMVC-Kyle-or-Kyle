@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: c3MEuqEhntw/xcVR4dwHUjYygXzUJLYfp4rWqFO3/rFa/n+V43gx7E+IPr1oB9wJsbwqSpQJuSWSDX8fckRljiJrs3sdIgKqliTtHe1qxBXnMMQp1SPbirpzVK/M+4zYSuFZogqz6ZZpqzf3/ly0v7x2lzCQFKz/jNcTBhH85jDzyML+1ryS3MKOcZ6EwagYWy1CRpOt4anI4o+4fyl9jRnhPKGMzvqQ4hptFZ8SO42wzQUqghTRY+XyJpAD7C3eEQFBq26oODtq6ARKgZXq42cQd0Gp7lhdq6MKuyMv7+NomPxCQYX2lwV3tOrdfZVC8wkZXkcEV+vauj7MsJFnzh8H57+OFcW85u0tgyAg5PUNb1BWldWqyjzjyzm1bywXglLN1MWaVyE77BwUYzgMommev15gHWRqt4egExm+zeJocOHoQYWJeANkpxUMHHOd7+AF6IjuVS1QRnH1Uyb2K3rwNvrElW5Vwis2FGwEji8EWwNjtvsi2X6ubFKoQqS3kW4rXlIt447hfkX7XlgtKWvtKY/vOFi6h7CNRxlOvBeI1n3r1z0dKGwKrlVx5UKIl/wLDaVNs/Hb7uZlhriEmqVuq4Lhpwn+UxwtT2P9Bvj5+bFpVRMKeP7GQHGTY1Q4kX1HtnL8JtqDu1M1J7Fm1GKdqUTSChV3GffY9SOC7So=
+  app: guarded-anchorage-71477
+  on:
+    repo: thinkful-c11/TodoMVC-Kyle-or-Kyle
